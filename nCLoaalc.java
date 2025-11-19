@@ -15,11 +15,13 @@ public class nCLoaalc {
 		System.out.println("Loan = " + loan + ", interest rate = " + rate + "%, periods = " + n);
 
 		// Computes the periodical payment using brute force search
+		iterationCounter = 0;
 		System.out.print("\nPeriodical payment, using brute force: ");
 		System.out.println((int) bruteForceSolver(loan, rate, n, epsilon));
 		System.out.println("number of iterations: " + iterationCounter);
 
 		// Computes the periodical payment using bisection search
+		iterationCounter = 0;
 		System.out.print("\nPeriodical payment, using bi-section search: ");
 		System.out.println((int) bisectionSolver(loan, rate, n, epsilon));
 		System.out.println("number of iterations: " + iterationCounter);
@@ -44,7 +46,7 @@ public class nCLoaalc {
     public static double bruteForceSolver(double loan, double rate, int n, double epsilon) {
 		double g = loan / n;
 		iterationCounter = 0;
-		while (endBalance(loan, rate, n, g) > 0) {
+		while (Math.abs(endBalance(loan, rate, n, g)) > epsilon) {
 			g = g + epsilon;
 			iterationCounter++;
 		}
@@ -60,9 +62,12 @@ public class nCLoaalc {
     public static double bisectionSolver(double loan, double rate, int n, double epsilon) {  
         iterationCounter = 0;
         double H = loan;
+		while (endBalance(loan, rate, n, H) > 0) {
+			H = H + 100;
+		}
 		double L = loan / n;
 		double g = (L + H) / 2;
-		while (epsilon < (H - L)) {
+		while (Math.abs(H - L) > epsilon) {
         iterationCounter++;
 		double f_g = endBalance(loan, rate, n, g);
 		double f_L = endBalance(loan, rate, n, L);
