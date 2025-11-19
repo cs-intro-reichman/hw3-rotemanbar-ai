@@ -37,33 +37,57 @@ public class Algebra {
 	}
 
 	// Returns x1 * x2
-	public static int times(int x1, int x2) {
-		int sum = 0;
-		for (int i = 0; i< x2; i++) {
-			sum = plus(sum, x1);
-		}
-		return sum;
-	}
+    public static int times(int x1, int x2) {
+	    int sum = 0;
+	    boolean negative = false;
+
+	    if (x2 < 0) {
+		    x2 = minus(0, x2);   // x2 = |x2|
+		    negative = true;
+	    }
+	    for (int i = 0; i < x2; i++) {
+		    sum = plus(sum, x1);
+	    }
+
+	    if (negative) {
+		    sum = minus(0, sum);
+	    }
+
+	    return sum;
+    }
+
 
 	// Returns x^n (for n >= 0)
 	public static int pow(int x, int n) {
-		int sum = 1;
-		for (int i = 0; i < n; i++) {
-			sum = times(sum, x);
-		}
-		return sum;
+	boolean negative = x < 0 && (n % 2 != 0);
+	if (x < 0) x = minus(0, x);
+
+	int sum = 1;
+	for (int i = 0; i < n; i++) {
+		sum = times(sum, x);
 	}
+
+	if (negative) sum = minus(0, sum);
+	return sum;
+}
 
 	// Returns the integer part of x1 / x2 
 	public static int div(int x1, int x2) {
-		int count = 0;
-		int temp = x1;
-		while (temp >= x2) {
-			temp = minus(temp, x2);
-            count++;
-		}
-		return count;
+	boolean negative = (x1 < 0 && x2 > 0) || (x1 > 0 && x2 < 0);
+	if (x1 < 0) x1 = minus(0, x1);
+	if (x2 < 0) x2 = minus(0, x2);
+
+	int count = 0;
+	int temp = x1;
+	while (temp >= x2) {
+		temp = minus(temp, x2);
+		count++;
 	}
+
+	if (negative) count = minus(0, count);
+	return count;
+}
+
 
 	// Returns x1 % x2
 	public static int mod(int x1, int x2) {
