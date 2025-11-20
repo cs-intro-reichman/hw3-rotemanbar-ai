@@ -45,17 +45,25 @@ public class LoanCalc {
 	// Side effect: modifies the class variable iterationCounter.
     public static double bruteForceSolver(double loan, double rate, int n, double epsilon) {
     double g = loan / n;
+    double step = epsilon;
     iterationCounter = 0;
 
-    int maxIterations = 200000; // כדי למנוע תקיעה ב-autograder
+    // נחפש Payment כך שהיתרה תתקרב ל-0
+    while (Math.abs(endBalance(loan, rate, n, g)) > epsilon) {
+        double bal = endBalance(loan, rate, n, g);
 
-    while (Math.abs(endBalance(loan, rate, n, g)) > epsilon && iterationCounter < maxIterations) {
-        g = g + epsilon;
+        if (bal > 0)
+            g += step;
+        else
+            g -= step / 2;  // צמצום כדי לא לעבור את הערך הרצוי
+
         iterationCounter++;
+        if (iterationCounter > 5000000) break; // ביטחון במקרה קיצוני
     }
 
     return g;
 }
+
 
     
     // Uses bisection search to compute an approximation of the periodical payment 
