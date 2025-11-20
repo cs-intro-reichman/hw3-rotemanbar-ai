@@ -29,14 +29,15 @@ public class LoanCalc {
 
 	// Computes the ending balance of a loan, given the loan amount, the periodical
 	// interest rate (as a percentage), the number of periods (n), and the periodical payment.
-	private static double endBalance(double loan, double rate, int n, double payment) {	
-		double actualRate = rate / 100.0;
-		for (int i = 0; i < n; i++) {
-			loan = loan * (1 + actualRate);
-            loan = loan - payment;
-		}
-		return loan;
-	}
+	private static double endBalance(double loan, double rate, int n, double payment) {
+    double actualRate = rate / 100.0;
+    for (int i = 0; i < n; i++) {
+        // הסדר הנכון לפי המטלה: קודם מפחיתים תשלום, ואז מוסיפים ריבית
+        loan = loan - payment;
+        loan = loan * (1 + actualRate);
+    }
+    return loan;
+}}
 	
 	// Uses sequential search to compute an approximation of the periodical payment
 	// that will bring the ending balance of a loan close to 0.
@@ -48,17 +49,11 @@ public class LoanCalc {
     double step = epsilon;
     iterationCounter = 0;
 
-    // נחפש Payment כך שהיתרה תתקרב ל-0
-    while (Math.abs(endBalance(loan, rate, n, g)) > epsilon) {
-        double bal = endBalance(loan, rate, n, g);
-
-        if (bal > 0)
-            g += step;
-        else
-            g -= step / 2;  // צמצום כדי לא לעבור את הערך הרצוי
-
+    // כל עוד נשאר חוב (היתרה גדולה מ-0), נגדיל את התשלום
+    // אין צורך ב-Math.abs כאן, כי אנחנו מחפשים את המעבר מחיובי לשלילי
+    while (endBalance(loan, rate, n, g) > 0) {
+        g += step;
         iterationCounter++;
-        if (iterationCounter > 5000000) break; // ביטחון במקרה קיצוני
     }
 
     return g;
