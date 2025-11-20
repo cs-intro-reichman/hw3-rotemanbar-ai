@@ -38,37 +38,43 @@ public class Algebra {
 
 	// Returns x1 * x2
     public static int times(int x1, int x2) {
-	    int sum = 0;
-	    boolean negative = false;
-
-	    if (x2 < 0) {
-		    x2 = minus(0, x2);   // x2 = |x2|
-		    negative = true;
-	    }
-	    for (int i = 0; i < x2; i++) {
-		    sum = plus(sum, x1);
-	    }
-
-	    if (negative) {
-		    sum = minus(0, sum);
-	    }
-
-	    return sum;
+    boolean negative = false;
+    if (x2 < 0) {
+        negative = true;
+        x2 = minus(0, x2);
     }
 
+    int result = 0;
+    int current = x1;
+
+    while (x2 > 0) {
+        if (mod(x2, 2) == 1) {
+            result = plus(result, current);
+        }
+        current = plus(current, current);
+        x2 = div(x2, 2);
+    }
+
+    return negative ? minus(0, result) : result;
+}
 
 	// Returns x^n (for n >= 0)
 	public static int pow(int x, int n) {
-	boolean negative = x < 0 && (n % 2 != 0);
-	if (x < 0) x = minus(0, x);
+    boolean negative = (x < 0 && mod(n, 2) == 1);
+    if (x < 0) x = minus(0, x);
 
-	int sum = 1;
-	for (int i = 0; i < n; i++) {
-		sum = times(sum, x);
-	}
+    int result = 1;
+    int base = x;
 
-	if (negative) sum = minus(0, sum);
-	return sum;
+    while (n > 0) {
+        if (mod(n, 2) == 1) {
+            result = times(result, base);
+        }
+        base = times(base, base);
+        n = div(n, 2);
+    }
+
+    return negative ? minus(0, result) : result;
 }
 
 	// Returns the integer part of x1 / x2 
