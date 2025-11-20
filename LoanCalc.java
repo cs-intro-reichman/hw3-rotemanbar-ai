@@ -70,6 +70,9 @@ public class LoanCalc {
 		while (Math.abs(H - L) > epsilon) {
         iterationCounter++;
 		double f_g = endBalance(loan, rate, n, g);
+		if (Math.abs(f_g) <= epsilon) {
+            return g;
+        }
 		double f_L = endBalance(loan, rate, n, L);
 		if (f_g * f_L > 0) {
 			L = g;
