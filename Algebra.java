@@ -98,9 +98,10 @@ public class Algebra {
 	// Returns x1 % x2
 	public static int mod(int x1, int x2) {
     int q = div(x1, x2);
-    int product = times(q, x2);
-    return minus(x1, product);
+    int p = times(q, x2);
+    return minus(x1, p);
 }
+
 	
 
 	// Returns the integer part of sqrt(x) 
