@@ -96,13 +96,18 @@ public class Algebra {
 
 
 	// Returns x1 % x2
-	public static int mod(int x1, int x2) {
-    int q = div(x1, x2);
-    int p = times(q, x2);
-    return minus(x1, p);
-}
+	// Returns x1 % x2
+public static int mod(int x1, int x2) {
+    boolean negative = x1 < 0;
+    if (x1 < 0) x1 = minus(0, x1);
+    if (x2 < 0) x2 = minus(0, x2);
 
-	
+    while (x1 >= x2) {
+        x1 = minus(x1, x2);
+    }
+
+    return negative ? minus(0, x1) : x1;
+}
 
 	// Returns the integer part of sqrt(x) 
 	public static int sqrt(int x) {
